@@ -4,10 +4,8 @@ package com.sws.myGenerator.api;
 
 import com.sws.myGenerator.codegen.mybatis.javamapper.JavaControllerGenerator;
 import com.sws.myGenerator.codegen.mybatis.javamapper.JavaServiceGenerator;
-import com.sws.myGenerator.config.JavaControllerGeneratorConfiguration;
-import com.sws.myGenerator.config.JavaServiceGeneratorConfiguration;
-import com.sws.myGenerator.config.MyConfiguration;
-import com.sws.myGenerator.config.MyContext;
+import com.sws.myGenerator.codegen.mybatis.javamapper.javaServiceImplGenerator;
+import com.sws.myGenerator.config.*;
 import org.mybatis.generator.api.GeneratedJavaFile;
 import org.mybatis.generator.api.GeneratedXmlFile;
 import org.mybatis.generator.api.IntrospectedTable;
@@ -44,6 +42,7 @@ public class MyIntrospectedTable extends IntrospectedTable {
     }
     protected enum MyInternalAttribute {
         ATTR_SERVICE_TYPE,
+        ATTR_SERVICEIMPL_TYPE,
         ATTR_CONTROLLER_TYPE
     }
 
@@ -57,11 +56,14 @@ public class MyIntrospectedTable extends IntrospectedTable {
 
     protected List<AbstractJavaGenerator> javaServiceGenerators;
 
+    protected List<AbstractJavaGenerator> javaServiceImplGenerators;
+
     protected List<AbstractJavaGenerator> javaControllerGenerators;
 
     public MyIntrospectedTable() {
         super(TargetRuntime.MYBATIS3);
 
+        javaServiceImplGenerators = new ArrayList<AbstractJavaGenerator>();
         javaServiceGenerators = new ArrayList<AbstractJavaGenerator>();
         javaControllerGenerators = new ArrayList<AbstractJavaGenerator>();
         internalAttributes = new HashMap<MyInternalAttribute, String>();
@@ -69,6 +71,7 @@ public class MyIntrospectedTable extends IntrospectedTable {
 
 
 
+    @Override
     public void initialize() {
         this.context = this.mycontext.getContext();
         this.fullyQualifiedTable = this.oldIntrospectedTabke.getFullyQualifiedTable();
@@ -83,6 +86,7 @@ public class MyIntrospectedTable extends IntrospectedTable {
         calculateXmlAttributes();
         calculateJavaClientAttributes();
         calculateJavaServiceAttributes();//service
+        calculateJavaServiceImplAttributes();//serviceImpl
         calculateModelAttributes();
         calculateJavaControllerAttributes();
 
@@ -120,6 +124,7 @@ public class MyIntrospectedTable extends IntrospectedTable {
         return sb.toString();
     }
 
+    @Override
     protected void calculateXmlAttributes() {
         setIbatis2SqlMapPackage(calculateSqlMapPackage());
         setIbatis2SqlMapFileName(calculateIbatis2SqlMapFileName());
@@ -154,6 +159,7 @@ public class MyIntrospectedTable extends IntrospectedTable {
         setBlobColumnListId("Blob_Column_List"); //$NON-NLS-1$
         setMyBatis3UpdateByExampleWhereClauseId("Update_By_Example_Where_Clause"); //$NON-NLS-1$
     }
+    @Override
     protected void calculateJavaClientAttributes() {
         if (context.getJavaClientGeneratorConfiguration() == null) {
             return;
@@ -177,6 +183,7 @@ public class MyIntrospectedTable extends IntrospectedTable {
     }
 
 
+    @Override
     protected void calculateModelAttributes() {
         String pakkage = calculateJavaModelPackage();
 
@@ -207,6 +214,7 @@ public class MyIntrospectedTable extends IntrospectedTable {
         sb.append("Example"); //$NON-NLS-1$
         setExampleType(sb.toString());
     }
+    @Override
     protected String calculateJavaClientInterfacePackage() {
         JavaClientGeneratorConfiguration config = this.context.getJavaClientGeneratorConfiguration();
         if (config == null) {
@@ -219,6 +227,7 @@ public class MyIntrospectedTable extends IntrospectedTable {
         }
     }
 
+    //###############service
     protected void calculateJavaServiceAttributes() {
         if (mycontext.getJavaServiceGeneratorConfiguration() == null) {
             return;
@@ -230,6 +239,32 @@ public class MyIntrospectedTable extends IntrospectedTable {
         sb.append(fullyQualifiedTable.getDomainObjectName());
         sb.append("Service");
         setServiceType(sb.toString());
+    }
+
+
+    //#############################serviceimpl
+    protected void calculateJavaServiceImplAttributes() {
+        if (mycontext.getJavaServiceImplGeneratorConfiguration() == null) {
+            return;
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.setLength(0);
+        sb.append(calculateJavaServiceImplPackage());
+        sb.append('.');
+        sb.append(fullyQualifiedTable.getDomainObjectName());
+        sb.append("ServiceImpl");
+        setServiceImplType(sb.toString());
+    }
+
+    protected String calculateJavaServiceImplPackage() {
+        JavaServiceImplGeneratorConfiguration config = mycontext.getJavaServiceImplGeneratorConfiguration();
+        if (config == null) {
+            return null;
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(config.getTargetPackage());
+        sb.append(fullyQualifiedTable.getSubPackageForClientOrSqlMap(isSubPackagesEnabled(config)));
+        return sb.toString();
     }
 
     protected String calculateJavaServicePackage() {
@@ -247,6 +282,9 @@ public class MyIntrospectedTable extends IntrospectedTable {
         internalAttributes.put(MyInternalAttribute.ATTR_SERVICE_TYPE, serviceType);
     }
 
+    public void setServiceImplType(String serviceImplType) {
+        internalAttributes.put(MyInternalAttribute.ATTR_SERVICEIMPL_TYPE, serviceImplType);
+    }
     public void setControllerType(String controllerType) {
         internalAttributes.put(MyInternalAttribute.ATTR_CONTROLLER_TYPE, controllerType);
     }
@@ -264,8 +302,11 @@ public class MyIntrospectedTable extends IntrospectedTable {
                                     ProgressCallback progressCallback) {
 
         calculateJavaServiceGenerators(warnings, progressCallback);
+        calculateJavaServiceImplGenerators(warnings, progressCallback);
         calculateJavaControllerGenerators(warnings,progressCallback);
     }
+
+
 
 
     protected AbstractJavaGenerator calculateJavaControllerGenerators(List<String> warnings, ProgressCallback progressCallback) {
@@ -300,6 +341,22 @@ public class MyIntrospectedTable extends IntrospectedTable {
         return javaGenerator;
     }
 
+    protected AbstractJavaGenerator calculateJavaServiceImplGenerators(List<String> warnings, ProgressCallback progressCallback) {
+        if (!rules.generateJavaClient()) {
+            return null;
+        }
+
+        AbstractJavaGenerator javaGenerator = new javaServiceImplGenerator();
+        if (javaGenerator == null) {
+            return null;
+        }
+
+        initializeAbstractGenerator(javaGenerator, warnings, progressCallback);
+        javaServiceImplGenerators.add(javaGenerator);
+
+        return javaGenerator;
+    }
+
 
     protected void initializeAbstractGenerator(
             AbstractGenerator abstractGenerator, List<String> warnings,
@@ -315,6 +372,10 @@ public class MyIntrospectedTable extends IntrospectedTable {
     }
     public String getServiceType() {
         return internalAttributes.get(MyInternalAttribute.ATTR_SERVICE_TYPE);
+    }
+
+    public String getServiceImplType() {
+        return internalAttributes.get(MyInternalAttribute.ATTR_SERVICEIMPL_TYPE);
     }
 
     public String getControllerType() {
@@ -334,6 +395,18 @@ public class MyIntrospectedTable extends IntrospectedTable {
                 answer.add(gjf);
             }
         }
+
+        for (AbstractJavaGenerator javaGenerator : javaServiceImplGenerators) {
+            List<CompilationUnit> compilationUnits = javaGenerator.getCompilationUnits();
+            for (CompilationUnit compilationUnit : compilationUnits) {
+                GeneratedJavaFile gjf = new GeneratedJavaFile(compilationUnit,
+                        mycontext.getJavaServiceImplGeneratorConfiguration().getTargetProject(),
+                        context.getProperty(PropertyRegistry.CONTEXT_JAVA_FILE_ENCODING),
+                        context.getJavaFormatter());
+                answer.add(gjf);
+            }
+        }
+
         for (AbstractJavaGenerator javaGenerator : javaControllerGenerators) {
             List<CompilationUnit> compilationUnits = javaGenerator.getCompilationUnits();
             for (CompilationUnit compilationUnit : compilationUnits) {

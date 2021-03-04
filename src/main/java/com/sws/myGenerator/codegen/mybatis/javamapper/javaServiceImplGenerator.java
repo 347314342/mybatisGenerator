@@ -4,15 +4,18 @@ import com.sws.myGenerator.api.MyIntrospectedTable;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.codegen.AbstractJavaGenerator;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+/**
+ * @author
+ */
+public class javaServiceImplGenerator extends AbstractJavaGenerator {
 
-public class JavaServiceGenerator extends AbstractJavaGenerator {
-
-    public JavaServiceGenerator(){
+    public javaServiceImplGenerator(){
         super();
     }
     public boolean isSimple = true;
@@ -23,11 +26,13 @@ public class JavaServiceGenerator extends AbstractJavaGenerator {
     public List<CompilationUnit> getCompilationUnits() {
 
 
-        FullyQualifiedJavaType type = new FullyQualifiedJavaType(((MyIntrospectedTable)introspectedTable).getServiceType());
+        FullyQualifiedJavaType type = new FullyQualifiedJavaType(((MyIntrospectedTable)introspectedTable).getServiceImplType());
         TopLevelClass topLevelClass = new TopLevelClass(type);
         topLevelClass.setVisibility(JavaVisibility.PUBLIC);
-        //topLevelClass.addAnnotation("@Service");
-        //topLevelClass.addImportedType("org.springframework.stereotype.Service");
+        topLevelClass.addSuperInterface(type);
+        topLevelClass.addAnnotation("@Service");
+        topLevelClass.addImportedType("org.springframework.stereotype.Service");
+
 
         Method method = new Method();
 
@@ -38,6 +43,7 @@ public class JavaServiceGenerator extends AbstractJavaGenerator {
         field.setType(daoType);
         field.setName(daoTypeName);
         field.addAnnotation("@Autowired");
+
         topLevelClass.addField(field);
         topLevelClass.addImportedType(daoType);
         topLevelClass.addImportedType("org.springframework.beans.factory.annotation.Autowired");

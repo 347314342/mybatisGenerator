@@ -8,10 +8,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
 
-import com.sws.myGenerator.config.JavaControllerGeneratorConfiguration;
-import com.sws.myGenerator.config.JavaServiceGeneratorConfiguration;
-import com.sws.myGenerator.config.MyConfiguration;
-import com.sws.myGenerator.config.MyContext;
+import com.sws.myGenerator.config.*;
 import org.mybatis.generator.config.*;
 import org.mybatis.generator.exception.XMLParserException;
 import org.mybatis.generator.internal.ObjectFactory;
@@ -120,6 +117,10 @@ public class LocalMyBatisGeneratorConfigurationParser {
                 //context添加javaServiceGenerator标签解析
                 parseJavaServiceGenerator(context, childNode);
             }
+            if ("javaServiceImplGenerator".equals(childNode.getNodeName())) {
+                //context添加javaServiceImplGenerator标签解析
+                parseJavaServiceImplGenerator(context, childNode);
+            }
             if ("javaControllerGenerator".equals(childNode.getNodeName())) {
                 //context添加javaControllerGenerator标签解析
                 parseJavaControllerGenerator(context, childNode);
@@ -168,6 +169,29 @@ public class LocalMyBatisGeneratorConfigurationParser {
             }
             if ("property".equals(childNode.getNodeName())) {
                 parseProperty(javaServiceGeneratorConfiguration, childNode);
+            }
+        }
+    }
+
+
+    protected void parseJavaServiceImplGenerator(MyContext context, Node node) {
+        //自定义解析器
+        JavaServiceImplGeneratorConfiguration javaServiceImplGeneratorConfiguration = new JavaServiceImplGeneratorConfiguration();
+        //将解析器法放入上下文
+        context.setJavaServiceImplGeneratorConfiguration(javaServiceImplGeneratorConfiguration);
+        Properties attributes = parseAttributes(node);
+        String targetPackage = attributes.getProperty("targetPackage");
+        String targetProject = attributes.getProperty("targetProject");
+        javaServiceImplGeneratorConfiguration.setTargetPackage(targetPackage);
+        javaServiceImplGeneratorConfiguration.setTargetProject(targetProject);
+        NodeList nodeList = node.getChildNodes();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node childNode = nodeList.item(i);
+            if (childNode.getNodeType() != Node.ELEMENT_NODE) {
+                continue;
+            }
+            if ("property".equals(childNode.getNodeName())) {
+                parseProperty(javaServiceImplGeneratorConfiguration, childNode);
             }
         }
     }

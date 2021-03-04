@@ -28,6 +28,7 @@ public class MyContext extends PropertyHolder {
 
     private String id;
     private JavaServiceGeneratorConfiguration javaServiceGeneratorConfiguration;
+    private JavaServiceImplGeneratorConfiguration javaServiceImplGeneratorConfiguration;
     private JavaControllerGeneratorConfiguration javaControllerGeneratorConfiguration;
     private Context context;
     private PluginAggregator pluginAggregator;
@@ -47,6 +48,15 @@ public class MyContext extends PropertyHolder {
         return context;
     }
 
+
+    public void setJavaServiceImplGeneratorConfiguration(JavaServiceImplGeneratorConfiguration javaServiceImplGeneratorConfiguration) {
+        this.javaServiceImplGeneratorConfiguration = javaServiceImplGeneratorConfiguration;
+    }
+
+    public JavaServiceImplGeneratorConfiguration getJavaServiceImplGeneratorConfiguration() {
+        return javaServiceImplGeneratorConfiguration;
+    }
+
     public void setJavaServiceGeneratorConfiguration(JavaServiceGeneratorConfiguration javaServiceGeneratorConfiguration) {
         this.javaServiceGeneratorConfiguration = javaServiceGeneratorConfiguration;
     }
@@ -54,6 +64,8 @@ public class MyContext extends PropertyHolder {
     public JavaServiceGeneratorConfiguration getJavaServiceGeneratorConfiguration() {
         return javaServiceGeneratorConfiguration;
     }
+
+
 
     public JavaControllerGeneratorConfiguration getJavaControllerGeneratorConfiguration() {
         return javaControllerGeneratorConfiguration;
@@ -94,6 +106,7 @@ public class MyContext extends PropertyHolder {
         addPropertyXmlElements(xmlElement);
         if (javaServiceGeneratorConfiguration != null) {
             xmlElement.addElement(javaServiceGeneratorConfiguration.toXmlElement());
+//            xmlElement.addElement(javaServiceImplGeneratorConfiguration.toXmlElement());
         }
         return xmlElement;
     }
@@ -180,9 +193,12 @@ public class MyContext extends PropertyHolder {
                 //初始化dao,service,entity,xml名
                 introspectedTable.initialize();
                 introspectedTable.calculateGenerators(warnings, callback);
+
+                //生成java文件
                 generatedJavaFiles.addAll(introspectedTable.getGeneratedJavaFiles());
                // generatedXmlFiles.addAll(introspectedTable.getGeneratedXmlFiles());
 
+                //生成不知道什么文件
                 generatedJavaFiles.addAll(pluginAggregator.contextGenerateAdditionalJavaFiles(introspectedTable));
                 //generatedXmlFiles.addAll(pluginAggregator.contextGenerateAdditionalXmlFiles(introspectedTable));
             }
@@ -191,5 +207,6 @@ public class MyContext extends PropertyHolder {
         generatedJavaFiles.addAll(pluginAggregator.contextGenerateAdditionalJavaFiles());
         //generatedXmlFiles.addAll(pluginAggregator.contextGenerateAdditionalXmlFiles());
     }
+
 
 }

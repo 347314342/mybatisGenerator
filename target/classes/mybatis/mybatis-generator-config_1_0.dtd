@@ -7,8 +7,9 @@
   resource CDATA #IMPLIED
   url CDATA #IMPLIED>
 
+
 <!ELEMENT context (property*, plugin*, commentGenerator?, (connectionFactory | jdbcConnection), javaTypeResolver?,
-        javaControllerGenerator,javaServiceGenerator,javaModelGenerator, sqlMapGenerator?, javaClientGenerator?, table+)>
+        javaControllerGenerator,javaServiceGenerator,javaServiceImplGenerator,javaModelGenerator, sqlMapGenerator?, javaClientGenerator?, table+)>
 <!ATTLIST context id ID #REQUIRED
   defaultModelType CDATA #IMPLIED
   targetRuntime CDATA #IMPLIED
@@ -47,6 +48,12 @@
 
 <!ELEMENT javaServiceGenerator (property*)>
 <!ATTLIST javaServiceGenerator
+        targetPackage CDATA #REQUIRED
+        targetProject CDATA #REQUIRED
+        implementationPackage CDATA #IMPLIED>
+
+<!ELEMENT javaServiceImplGenerator (property*)>
+<!ATTLIST javaServiceImplGenerator
         targetPackage CDATA #REQUIRED
         targetProject CDATA #REQUIRED
         implementationPackage CDATA #IMPLIED>

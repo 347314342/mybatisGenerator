@@ -1,6 +1,7 @@
 package com.sws.myGenerator.codegen.mybatis.javamapper;
 
 import com.sws.myGenerator.api.MyIntrospectedTable;
+import io.swagger.annotations.Api;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.codegen.AbstractJavaGenerator;
@@ -32,7 +33,8 @@ public class JavaControllerGenerator extends AbstractJavaGenerator {
         TopLevelClass topLevelClass = new TopLevelClass(type);
         topLevelClass.setVisibility(JavaVisibility.PUBLIC);
         topLevelClass.addAnnotation("@RestController");
-        topLevelClass.addAnnotation("@RequestMapping(\"/"+entityName+"\")");
+ //       topLevelClass.addAnnotation("@Api(\"/"+entityName+"\")");
+//        @Api(value = "小文章接口", tags = {"小文章接口"})
         topLevelClass.addImportedType("org.springframework.web.bind.annotation.RestController");
         topLevelClass.addImportedType("org.springframework.web.bind.annotation.RequestMapping");
         topLevelClass.addImportedType("org.springframework.beans.factory.annotation.Autowired");
@@ -66,7 +68,7 @@ public class JavaControllerGenerator extends AbstractJavaGenerator {
         importedTypes.add(parameterType1);
         method.addParameter(new Parameter(parameterType1, "entity"));
         method.addBodyLine("return "+serviceTypeName+"."+introspectedTable.getInsertStatementId()+"(entity);");
-        method.addAnnotation("@RequestMapping(\"/"+introspectedTable.getInsertStatementId()+"\")");
+        method.addAnnotation("@PostMapping(\"/"+introspectedTable.getInsertStatementId()+"\")");
         topLevelClass.addMethod(method);
 
 
@@ -95,7 +97,7 @@ public class JavaControllerGenerator extends AbstractJavaGenerator {
             }
         }
         method.addBodyLine("return "+serviceTypeName+"."+introspectedTable.getDeleteByPrimaryKeyStatementId()+"("+sb.toString()+");");
-        method.addAnnotation("@RequestMapping(\"/"+introspectedTable.getDeleteByPrimaryKeyStatementId()+"\")");
+        method.addAnnotation("@PostMapping(\"/"+introspectedTable.getDeleteByPrimaryKeyStatementId()+"\")");
         topLevelClass.addMethod(method);
 
         //修改
@@ -113,7 +115,7 @@ public class JavaControllerGenerator extends AbstractJavaGenerator {
         method.setName(introspectedTable.getUpdateByPrimaryKeyStatementId());
         method.addParameter(new Parameter(parameterType2, "record"));
         method.addBodyLine("return "+serviceTypeName+"."+introspectedTable.getUpdateByPrimaryKeyStatementId()+"(record);");
-        method.addAnnotation("@RequestMapping(\"/"+introspectedTable.getUpdateByPrimaryKeyStatementId()+"\")");
+        method.addAnnotation("@PostMapping(\"/"+introspectedTable.getUpdateByPrimaryKeyStatementId()+"\")");
         topLevelClass.addMethod(method);
 
         //查询
@@ -128,7 +130,7 @@ public class JavaControllerGenerator extends AbstractJavaGenerator {
         method.setReturnType(returnType);
         method.setName(introspectedTable.getSelectAllStatementId());
         method.addBodyLine("return "+serviceTypeName+"."+introspectedTable.getSelectAllStatementId()+"();");
-        method.addAnnotation("@RequestMapping(\"/"+introspectedTable.getSelectAllStatementId()+"\")");
+        method.addAnnotation("@GetMapping(\"/"+introspectedTable.getSelectAllStatementId()+"\")");
         topLevelClass.addMethod(method);
         topLevelClass.addImportedTypes(importedTypes);
 

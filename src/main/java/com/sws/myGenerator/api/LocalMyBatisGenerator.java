@@ -185,7 +185,8 @@ public class LocalMyBatisGenerator {
             callback.startTask(getString(
                     "Progress.15", targetFile.getName())); //$NON-NLS-1$
             writeFile(targetFile, source, gjf.getFileEncoding());
-        } catch (ShellException e) {
+        }
+        catch (ShellException e) {
             warnings.add(e.getMessage());
         }
     }
