@@ -182,8 +182,10 @@ public class LocalMyBatisGeneratorConfigurationParser {
         Properties attributes = parseAttributes(node);
         String targetPackage = attributes.getProperty("targetPackage");
         String targetProject = attributes.getProperty("targetProject");
+        String implementationPackage = attributes.getProperty("implementationPackage");
         javaServiceImplGeneratorConfiguration.setTargetPackage(targetPackage);
         javaServiceImplGeneratorConfiguration.setTargetProject(targetProject);
+        javaServiceImplGeneratorConfiguration.setImplementationPackage(implementationPackage);
         NodeList nodeList = node.getChildNodes();
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node childNode = nodeList.item(i);

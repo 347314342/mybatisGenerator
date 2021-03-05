@@ -31,21 +31,21 @@ public class JavaServiceGenerator extends AbstractJavaGenerator {
 
         Method method = new Method();
 
-        Field field = new Field();
-        field.setVisibility(JavaVisibility.PROTECTED);
-        FullyQualifiedJavaType daoType = new FullyQualifiedJavaType(introspectedTable.getMyBatis3JavaMapperType());
-        daoTypeName = daoType.getShortName().substring(0, 1).toLowerCase()+daoType.getShortName().substring(1);
-        field.setType(daoType);
-        field.setName(daoTypeName);
-        field.addAnnotation("@Autowired");
-        topLevelClass.addField(field);
-        topLevelClass.addImportedType(daoType);
-        topLevelClass.addImportedType("org.springframework.beans.factory.annotation.Autowired");
+//        Field field = new Field();
+//        field.setVisibility(JavaVisibility.PROTECTED);
+//        FullyQualifiedJavaType daoType = new FullyQualifiedJavaType(introspectedTable.getMyBatis3JavaMapperType());
+//        daoTypeName = daoType.getShortName().substring(0, 1).toLowerCase()+daoType.getShortName().substring(1);
+//        field.setType(daoType);
+//        field.setName(daoTypeName);
+//        field.addAnnotation("@Autowired");
+//        topLevelClass.addField(field);
+//        topLevelClass.addImportedType(daoType);
+//        topLevelClass.addImportedType("org.springframework.beans.factory.annotation.Autowired");
 
 
         //增加
         method = new Method();
-        method.setVisibility(JavaVisibility.PUBLIC);
+        //method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(FullyQualifiedJavaType.getIntInstance());
         method.setName(introspectedTable.getInsertStatementId());
         FullyQualifiedJavaType parameterType1;
@@ -57,13 +57,13 @@ public class JavaServiceGenerator extends AbstractJavaGenerator {
         Set<FullyQualifiedJavaType> importedTypes = new TreeSet<FullyQualifiedJavaType>();
         importedTypes.add(parameterType1);
         method.addParameter(new Parameter(parameterType1, "entity"));
-        method.addBodyLine("return "+daoTypeName+"."+introspectedTable.getInsertStatementId()+"(entity);");
+        //method.addBodyLine("return "+daoTypeName+"."+introspectedTable.getInsertStatementId()+"(entity);");
         topLevelClass.addMethod(method);
 
 
         //删除
         method = new Method();
-        method.setVisibility(JavaVisibility.PUBLIC);
+        //method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(FullyQualifiedJavaType.getIntInstance());
         method.setName(introspectedTable.getDeleteByPrimaryKeyStatementId());
         StringBuilder sb = new StringBuilder();
@@ -85,7 +85,7 @@ public class JavaServiceGenerator extends AbstractJavaGenerator {
                 method.addParameter(parameter);
             }
         }
-        method.addBodyLine("return "+daoTypeName+"."+introspectedTable.getDeleteByPrimaryKeyStatementId()+"("+sb.toString()+");");
+        //method.addBodyLine("return "+daoTypeName+"."+introspectedTable.getDeleteByPrimaryKeyStatementId()+"("+sb.toString()+");");
         topLevelClass.addMethod(method);
 
         //修改
@@ -98,17 +98,17 @@ public class JavaServiceGenerator extends AbstractJavaGenerator {
         }
         importedTypes.add(parameterType2);
         method = new Method();
-        method.setVisibility(JavaVisibility.PUBLIC);
+        //method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(FullyQualifiedJavaType.getIntInstance());
         method.setName(introspectedTable.getUpdateByPrimaryKeyStatementId());
         method.addParameter(new Parameter(parameterType2, "record"));
-        method.addBodyLine("return "+daoTypeName+"."+introspectedTable.getUpdateByPrimaryKeyStatementId()+"(record);");
+        //method.addBodyLine("return "+daoTypeName+"."+introspectedTable.getUpdateByPrimaryKeyStatementId()+"(record);");
         topLevelClass.addMethod(method);
 
         //查询
         method = new Method();
         importedTypes.add(FullyQualifiedJavaType.getNewListInstance());
-        method.setVisibility(JavaVisibility.PUBLIC);
+        //method.setVisibility(JavaVisibility.PUBLIC);
         FullyQualifiedJavaType returnType = FullyQualifiedJavaType.getNewListInstance();
         FullyQualifiedJavaType listType;
         listType = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType());
@@ -117,7 +117,7 @@ public class JavaServiceGenerator extends AbstractJavaGenerator {
 
         method.setReturnType(returnType);
         method.setName(introspectedTable.getSelectAllStatementId());
-        method.addBodyLine("return "+daoTypeName+"."+introspectedTable.getSelectAllStatementId()+"();");
+        //method.addBodyLine("return "+daoTypeName+"."+introspectedTable.getSelectAllStatementId()+"();");
         topLevelClass.addMethod(method);
         topLevelClass.addImportedTypes(importedTypes);
 

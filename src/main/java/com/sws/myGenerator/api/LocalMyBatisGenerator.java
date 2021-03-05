@@ -62,6 +62,7 @@ public class LocalMyBatisGenerator {
         }
         generatedJavaFiles = new ArrayList<GeneratedJavaFile>();
         generatedXmlFiles = new ArrayList<GeneratedXmlFile>();
+
         projects = new HashSet<String>();
 
         this.configuration.validate();

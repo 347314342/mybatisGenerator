@@ -5,6 +5,7 @@ import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.codegen.AbstractJavaGenerator;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -29,7 +30,13 @@ public class javaServiceImplGenerator extends AbstractJavaGenerator {
         FullyQualifiedJavaType type = new FullyQualifiedJavaType(((MyIntrospectedTable)introspectedTable).getServiceImplType());
         TopLevelClass topLevelClass = new TopLevelClass(type);
         topLevelClass.setVisibility(JavaVisibility.PUBLIC);
-        topLevelClass.addSuperInterface(type);
+
+        FullyQualifiedJavaType typeservice = new FullyQualifiedJavaType(((MyIntrospectedTable)introspectedTable).getServiceType());
+
+        topLevelClass.addSuperInterface(typeservice);
+        topLevelClass.addImportedType(typeservice.getPackageName()+"."+typeservice.getShortName());
+
+
         topLevelClass.addAnnotation("@Service");
         topLevelClass.addImportedType("org.springframework.stereotype.Service");
 
@@ -51,6 +58,7 @@ public class javaServiceImplGenerator extends AbstractJavaGenerator {
 
         //增加
         method = new Method();
+        method.addAnnotation("@Override");
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(FullyQualifiedJavaType.getIntInstance());
         method.setName(introspectedTable.getInsertStatementId());
@@ -69,6 +77,7 @@ public class javaServiceImplGenerator extends AbstractJavaGenerator {
 
         //删除
         method = new Method();
+        method.addAnnotation("@Override");
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(FullyQualifiedJavaType.getIntInstance());
         method.setName(introspectedTable.getDeleteByPrimaryKeyStatementId());
@@ -104,6 +113,7 @@ public class javaServiceImplGenerator extends AbstractJavaGenerator {
         }
         importedTypes.add(parameterType2);
         method = new Method();
+        method.addAnnotation("@Override");
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(FullyQualifiedJavaType.getIntInstance());
         method.setName(introspectedTable.getUpdateByPrimaryKeyStatementId());
@@ -113,6 +123,7 @@ public class javaServiceImplGenerator extends AbstractJavaGenerator {
 
         //查询
         method = new Method();
+        method.addAnnotation("@Override");
         importedTypes.add(FullyQualifiedJavaType.getNewListInstance());
         method.setVisibility(JavaVisibility.PUBLIC);
         FullyQualifiedJavaType returnType = FullyQualifiedJavaType.getNewListInstance();

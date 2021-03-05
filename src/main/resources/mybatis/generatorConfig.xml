@@ -54,7 +54,7 @@
         </javaControllerGenerator>
 
         <!-- 生成service类地址 -->
-        <javaServiceGenerator targetPackage="${spring.mybatis.service}" targetProject="${spring.mybatis.project}">
+        <javaServiceGenerator targetPackage="${spring.mybatis.service}" targetProject="${spring.mybatis.project}" >
         </javaServiceGenerator>
 
         <!-- 生成serviceImpl类地址 -->
