@@ -41,7 +41,14 @@
 <!--        </commentGenerator>-->
         <!-- jdbc连接 -->
         <jdbcConnection driverClass="${spring.datasource.driver-class-name}" connectionURL="${spring.datasource.url}"
-                        userId="${spring.datasource.username}" password="${spring.datasource.password}" />
+                        userId="${spring.datasource.username}" password="${spring.datasource.password}" >
+
+            <!--解决连接到别的数据库表问题-->
+            <property name="nullCatalogMeansCurrent" value="true" />
+            <!--解决不生成delete、update等-->
+            <property name="useInformationSchema" value="true"/>
+
+        </jdbcConnection>
         <!-- 类型转换 -->
         <javaTypeResolver>
             <!-- 是否使用bigDecimal， false可自动转化以下类型（Long, Integer, Short, etc.） -->
@@ -86,7 +93,9 @@
 <!--            &lt;!&ndash; 数据库表主键 &ndash;&gt;-->
 <!--            <generatedKey column="id" sqlStatement="Mysql" identity="true" />-->
 <!--        </table>-->
-        <table tableName="essay_img"   domainObjectName="EssayImg" mapperName="EssayImgDao"
+
+<!--     <table tableName="user"//表名   domainObjectName="User"类名  mapperName="UserDao"dao接口名 schema="lcshop"表所属数据库   -->
+        <table tableName="cart"   domainObjectName="Cart" mapperName="CartDao" schema="lcshop"
                enableCountByExample="false"
                enableUpdateByExample="false"
                enableDeleteByExample="false"
@@ -96,5 +105,26 @@
             <!-- 数据库表主键 -->
             <generatedKey column="id" sqlStatement="Mysql" identity="true" />
         </table>
+        <table tableName="card"   domainObjectName="Card" mapperName="CardDao" schema="lcshop"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false">
+            <property name="useActualColumnNames" value="false" />
+            <!-- 数据库表主键 -->
+            <generatedKey column="id" sqlStatement="Mysql" identity="true" />
+        </table>
+        <table tableName="order"   domainObjectName="Order" mapperName="OrderDao" schema="lcshop"
+                       enableCountByExample="false"
+                       enableUpdateByExample="false"
+                       enableDeleteByExample="false"
+                       enableSelectByExample="false"
+                       selectByExampleQueryId="false">
+        <property name="useActualColumnNames" value="false" />
+        <!-- 数据库表主键 -->
+        <generatedKey column="id" sqlStatement="Mysql" identity="true" />
+    </table>
+
     </context>
 </generatorConfiguration>

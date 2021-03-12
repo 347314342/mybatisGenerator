@@ -1,6 +1,7 @@
 package com.sws.myGenerator.codegen.mybatis.javamapper;
 
 import com.sws.myGenerator.api.MyIntrospectedTable;
+import io.swagger.annotations.ApiOperation;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.codegen.AbstractJavaGenerator;
@@ -63,6 +64,8 @@ public class JavaServiceGenerator extends AbstractJavaGenerator {
 
         //删除
         method = new Method();
+
+        //@ApiOperation(value = "通过id删除", notes = "通过id删除")
         //method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(FullyQualifiedJavaType.getIntInstance());
         method.setName(introspectedTable.getDeleteByPrimaryKeyStatementId());

@@ -33,7 +33,9 @@ public class JavaControllerGenerator extends AbstractJavaGenerator {
         TopLevelClass topLevelClass = new TopLevelClass(type);
         topLevelClass.setVisibility(JavaVisibility.PUBLIC);
         topLevelClass.addAnnotation("@RestController");
- //       topLevelClass.addAnnotation("@Api(\"/"+entityName+"\")");
+        topLevelClass.addAnnotation("@RequestMapping(\"/"+entityName+"\")");
+        topLevelClass.addAnnotation("@Api(\"/"+entityName+"\")");
+
 //        @Api(value = "小文章接口", tags = {"小文章接口"})
         topLevelClass.addImportedType("org.springframework.web.bind.annotation.RestController");
         topLevelClass.addImportedType("org.springframework.web.bind.annotation.RequestMapping");
