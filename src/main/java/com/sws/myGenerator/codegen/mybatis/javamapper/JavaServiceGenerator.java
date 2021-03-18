@@ -25,8 +25,14 @@ public class JavaServiceGenerator extends AbstractJavaGenerator {
 
 
         FullyQualifiedJavaType type = new FullyQualifiedJavaType(((MyIntrospectedTable)introspectedTable).getServiceType());
-        TopLevelClass topLevelClass = new TopLevelClass(type);
+        //添加到answer里的话会创建class类  ，但是不能删掉，有点鸡肋。删掉的话selectall中的方法
+        //context.getPlugins().modelExampleClassGenerated(topLevelClass1, introspectedTable)会报错   到时候看看能不能改
+        TopLevelClass topLevelClass1 = new TopLevelClass(type);
+        //添加到answer里的话会创建接口类
+        Interface topLevelClass = new Interface(type);
+
         topLevelClass.setVisibility(JavaVisibility.PUBLIC);
+        topLevelClass1.setVisibility(JavaVisibility.PUBLIC);
         //topLevelClass.addAnnotation("@Service");
         //topLevelClass.addImportedType("org.springframework.stereotype.Service");
 
@@ -60,6 +66,7 @@ public class JavaServiceGenerator extends AbstractJavaGenerator {
         method.addParameter(new Parameter(parameterType1, "entity"));
         //method.addBodyLine("return "+daoTypeName+"."+introspectedTable.getInsertStatementId()+"(entity);");
         topLevelClass.addMethod(method);
+        topLevelClass1.addMethod(method);
 
 
         //删除
@@ -90,6 +97,7 @@ public class JavaServiceGenerator extends AbstractJavaGenerator {
         }
         //method.addBodyLine("return "+daoTypeName+"."+introspectedTable.getDeleteByPrimaryKeyStatementId()+"("+sb.toString()+");");
         topLevelClass.addMethod(method);
+        topLevelClass1.addMethod(method);
 
         //修改
 
@@ -107,6 +115,7 @@ public class JavaServiceGenerator extends AbstractJavaGenerator {
         method.addParameter(new Parameter(parameterType2, "record"));
         //method.addBodyLine("return "+daoTypeName+"."+introspectedTable.getUpdateByPrimaryKeyStatementId()+"(record);");
         topLevelClass.addMethod(method);
+        topLevelClass1.addMethod(method);
 
         //查询
         method = new Method();
@@ -124,9 +133,12 @@ public class JavaServiceGenerator extends AbstractJavaGenerator {
         topLevelClass.addMethod(method);
         topLevelClass.addImportedTypes(importedTypes);
 
+        topLevelClass1.addMethod(method);
+        topLevelClass1.addImportedTypes(importedTypes);
+
 
         List<CompilationUnit> answer = new ArrayList<CompilationUnit>();
-        if (context.getPlugins().modelExampleClassGenerated(topLevelClass, introspectedTable)) {
+        if (context.getPlugins().modelExampleClassGenerated(topLevelClass1, introspectedTable)) {
             answer.add(topLevelClass);
         }
         return answer;
