@@ -27,6 +27,10 @@
         <plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
         <plugin type="org.mybatis.generator.plugins.ToStringPlugin" />
 
+        <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+            <property name="mappers" value="tk.mybatis.mapper.common.Mapper"/>
+        </plugin>
+
 
         <commentGenerator type="com.sws.myGenerator.utils.CommentGenerator">
             <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
@@ -81,6 +85,7 @@
         <!-- 生成mapxml对应client，也就是接口dao -->
         <javaClientGenerator targetPackage="${spring.mybatis.dao}" targetProject="${spring.mybatis.project}" type="XMLMAPPER" >
             <property name="enableSubPackages" value="false" />
+
         </javaClientGenerator>
         <!-- table可以有多个,每个数据库中的表都可以写一个table，tableName表示要匹配的数据库表,也可以在tableName属性中通过使用%通配符来匹配所有数据库表,只有匹配的表才会自动生成文件 -->
 <!--        <table tableName="committee"   domainObjectName="Committee" mapperName="CommitteeDao"-->

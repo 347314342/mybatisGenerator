@@ -80,6 +80,29 @@
             <version>1.9.1</version>
         </dependency>
 
+        <!--        tkmybatis-->
+        <dependency>
+            <groupId>tk.mybatis</groupId>
+            <artifactId>mapper-spring-boot-starter</artifactId>
+            <version>1.2.3</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-jdbc</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.mybatis</groupId>
+                    <artifactId>mybatis-spring</artifactId>
+                </exclusion>
+
+                <!--                主程序的tk中的MapperScan扫描包-->
+                <!--                <exclusion>-->
+                <!--                    <groupId>tk.mybatis</groupId>-->
+                <!--                    <artifactId>mapper-spring-boot-autoconfigure</artifactId>-->
+                <!--                </exclusion>-->
+            </exclusions>
+        </dependency>
+
 
     </dependencies>
     <build>
