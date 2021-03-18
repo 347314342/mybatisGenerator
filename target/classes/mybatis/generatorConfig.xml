@@ -95,7 +95,7 @@
 <!--        </table>-->
 
 <!--     <table tableName="user"//表名   domainObjectName="User"类名  mapperName="UserDao"dao接口名 schema="lcshop"表所属数据库   -->
-        <table tableName="cart"   domainObjectName="Cart" mapperName="CartDao" schema="lcshop"
+        <table tableName="fund_apply_advance_type"   domainObjectName="FundApplyAdvanceType" mapperName="FundApplyAdvanceTypeDao" schema="wuye"
                enableCountByExample="false"
                enableUpdateByExample="false"
                enableDeleteByExample="false"
@@ -105,7 +105,7 @@
             <!-- 数据库表主键 -->
             <generatedKey column="id" sqlStatement="Mysql" identity="true" />
         </table>
-        <table tableName="card"   domainObjectName="Card" mapperName="CardDao" schema="lcshop"
+        <table tableName="fund_apply_advance"   domainObjectName="FundApplyAdvance" mapperName="FundApplyAdvanceDao" schema="wuye"
                enableCountByExample="false"
                enableUpdateByExample="false"
                enableDeleteByExample="false"
@@ -115,16 +115,7 @@
             <!-- 数据库表主键 -->
             <generatedKey column="id" sqlStatement="Mysql" identity="true" />
         </table>
-        <table tableName="order"   domainObjectName="Order" mapperName="OrderDao" schema="lcshop"
-                       enableCountByExample="false"
-                       enableUpdateByExample="false"
-                       enableDeleteByExample="false"
-                       enableSelectByExample="false"
-                       selectByExampleQueryId="false">
-        <property name="useActualColumnNames" value="false" />
-        <!-- 数据库表主键 -->
-        <generatedKey column="id" sqlStatement="Mysql" identity="true" />
-    </table>
-        
+
+
     </context>
 </generatorConfiguration>

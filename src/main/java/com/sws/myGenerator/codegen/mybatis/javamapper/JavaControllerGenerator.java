@@ -34,7 +34,7 @@ public class JavaControllerGenerator extends AbstractJavaGenerator {
         topLevelClass.setVisibility(JavaVisibility.PUBLIC);
         topLevelClass.addAnnotation("@RestController");
         topLevelClass.addAnnotation("@RequestMapping(\"/"+entityName+"\")");
-        topLevelClass.addAnnotation("@Api(\"/"+entityName+"\")");
+        topLevelClass.addAnnotation("@Api(value = \"/"+entityName+"\", tags = {\"/"+entityName+"\"})");
 
 //        @Api(value = "小文章接口", tags = {"小文章接口"})
         topLevelClass.addImportedType("org.springframework.web.bind.annotation.RestController");
@@ -71,6 +71,7 @@ public class JavaControllerGenerator extends AbstractJavaGenerator {
         method.addParameter(new Parameter(parameterType1, "entity"));
         method.addBodyLine("return "+serviceTypeName+"."+introspectedTable.getInsertStatementId()+"(entity);");
         method.addAnnotation("@PostMapping(\"/"+introspectedTable.getInsertStatementId()+"\")");
+        method.addAnnotation("@ApiOperation(value = \"添加数据\", notes = \"添加数据\")");
         topLevelClass.addMethod(method);
 
 
@@ -100,6 +101,7 @@ public class JavaControllerGenerator extends AbstractJavaGenerator {
         }
         method.addBodyLine("return "+serviceTypeName+"."+introspectedTable.getDeleteByPrimaryKeyStatementId()+"("+sb.toString()+");");
         method.addAnnotation("@PostMapping(\"/"+introspectedTable.getDeleteByPrimaryKeyStatementId()+"\")");
+        method.addAnnotation("@ApiOperation(value = \"根据id删除数据\", notes = \"根据id删除数据\")");
         topLevelClass.addMethod(method);
 
         //修改
@@ -118,6 +120,7 @@ public class JavaControllerGenerator extends AbstractJavaGenerator {
         method.addParameter(new Parameter(parameterType2, "record"));
         method.addBodyLine("return "+serviceTypeName+"."+introspectedTable.getUpdateByPrimaryKeyStatementId()+"(record);");
         method.addAnnotation("@PostMapping(\"/"+introspectedTable.getUpdateByPrimaryKeyStatementId()+"\")");
+        method.addAnnotation("@ApiOperation(value = \"根据id更新数据\", notes = \"根据id更新数据\")");
         topLevelClass.addMethod(method);
 
         //查询
@@ -133,6 +136,7 @@ public class JavaControllerGenerator extends AbstractJavaGenerator {
         method.setName(introspectedTable.getSelectAllStatementId());
         method.addBodyLine("return "+serviceTypeName+"."+introspectedTable.getSelectAllStatementId()+"();");
         method.addAnnotation("@GetMapping(\"/"+introspectedTable.getSelectAllStatementId()+"\")");
+        method.addAnnotation("@ApiOperation(value = \"查询全部数据\", notes = \"查询全部数据\")");
         topLevelClass.addMethod(method);
         topLevelClass.addImportedTypes(importedTypes);
 
